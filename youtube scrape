@@ -1,0 +1,82 @@
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+import time
+from selenium.webdriver.common.by import By
+import json
+
+option = Options()
+option.headless = False
+
+driver = webdriver.Firefox(options=option)
+driver.implicitly_wait(5)
+baseUrl = "https://youtube.com/"
+keyword = "Programming"
+
+fname ="data-excel.csv"
+f=open(fname,"a", encoding="utf-8")
+f.write("videos-name,list")
+  
+
+def search(request):
+    if request.method=='POST':
+        search_text= request.POST['search_text']
+        link= "https://www.youtube.com/@" + search_text .replace(' ','+')
+        print(search_text)
+        print(link)
+        list=driver.find_elements(by=By.CLASS_NAME,value="style-scope ytd-c4-tabbed-header-renderer\n")
+        for item in list:
+            print(item.text)
+        list= item.get_attribute("href")
+def getChannelUrl():
+   
+    # driver.get(f"https://www.youtube.com/results?search_query=programming")
+    channel=input(" Enter the channel name=")
+    link= "https://www.youtube.com/@" + channel + "/videos"
+    driver.get(link)
+    time.sleep(3)
+    list = driver.find_elements(by=By.CLASS_NAME,value="style-scope ytd-c4-tabbed-header-renderer\n")
+    for item in list:
+        print(item.text)
+    list =  item.get_attribute("href")
+        
+    list=input('Enter the details===')
+    while True:
+        response=input('select from following option:\nSubscribe_(1)  \nHOME__(2) \nVIDEOS__(3)  \nPLAYLISTS_(4) \nCHANNELS__(5)  \nABOUT__(6)')
+        # response=['1','2','3','4','5','6']
+        subscriber=response.count
+        if response=='1':
+            print("The subscriber are:")
+            subscriber= driver.find_elements(by=By.ID,value="subscriber-count")
+            print(subscriber[0].text)
+            break
+        
+        elif response=='2':
+            Home=response.lower
+            print("Home")
+            Home=driver.find_elements(by=By.ID,value="tab-content style-scope tp-yt-paper-tab")
+            print(Home.extend)
+            print("You are back to home page:::")
+            break
+        
+        elif response=='3':
+            videos_container=driver.find_elements(by=By.ID, value="video-title-link")
+            
+            for item in videos_container:
+                print(item.text)
+                print(item.get_property("href"))
+                item=driver.find_elements(by=By.CLASS_NAME,value="yt-core-attributed-string yt-core-attributed-string--white-space-no-wrap")
+                print(item.count)
+            
+           
+            break
+        return list
+    f.write(videos_container +","+list)
+    
+        
+    
+        
+        
+if __name__ == "__main__":
+      allchannelUrls=  getChannelUrl()
+    #   allchannelUrls=  searchchannel()
+   
